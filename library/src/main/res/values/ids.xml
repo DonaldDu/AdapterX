@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="holder_item_position"/>
+    <item name="ON_ITEM_CLICK_LISTENER" type="id" />
+</resources>
