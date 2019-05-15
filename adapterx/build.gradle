@@ -11,7 +11,7 @@ android {
         versionName "0.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         packagingOptions {
-//            exclude 'META-INF/library_release.kotlin_module'
+//            exclude 'META-INF/**.kotlin_module'//排除后无法找到全局扩展方法，可以在app中排除
         }
     }
 
