@@ -8,10 +8,10 @@ android {
         minSdkVersion 14
         targetSdkVersion 28
         versionCode 1
-        versionName "0.1"
+        versionName "0.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         packagingOptions {
-            exclude 'META-INF/library_release.kotlin_module'
+//            exclude 'META-INF/library_release.kotlin_module'
         }
     }
 
@@ -26,6 +26,7 @@ publish {
     userOrg = 'user'
     groupId = 'com.gitee.DonaldDu'
     artifactId = 'AdapterX'
+    //noinspection GroovyAccessibility
     publishVersion = android.defaultConfig.versionName
     desc = 'desc'
     website = 'website'

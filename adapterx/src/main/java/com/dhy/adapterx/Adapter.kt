@@ -11,7 +11,12 @@ abstract class IViewHolder<DATA>(itemView: View) : RecyclerView.ViewHolder(itemV
     abstract fun update(data: DATA, position: Int)
 }
 
-open class AdapterX<HOLDER : IViewHolder<DATA>, DATA>(context: Context, holder: KClass<HOLDER>, list: List<DATA>? = null, vararg args: Any?) : IAdapter<HOLDER, DATA>(context, list, getLayoutId(holder), getHolderCreator(holder, *args)) {
+open class AdapterX<HOLDER : IViewHolder<DATA>, DATA>(
+    context: Context,
+    holder: KClass<HOLDER>,
+    list: List<DATA>? = null,
+    vararg args: Any?
+) : IAdapter<HOLDER, DATA>(context, list, getLayoutId(holder), getHolderCreator(holder, *args)) {
     override fun onBindViewHolder(holder: HOLDER, position: Int) {
         super.onBindViewHolder(holder, position)
         holder.update(getItem(position), position)
@@ -19,11 +24,11 @@ open class AdapterX<HOLDER : IViewHolder<DATA>, DATA>(context: Context, holder: 
 }
 
 @LayoutRes
-private fun <HOLDER : RecyclerView.ViewHolder> getLayoutId(holder: KClass<HOLDER>): Int {
+fun <HOLDER : RecyclerView.ViewHolder> getLayoutId(holder: KClass<HOLDER>): Int {
     return holder.java.getAnnotation(LayoutId::class.java)!!.value
 }
 
-private fun <HOLDER : RecyclerView.ViewHolder> getHolderCreator(holder: KClass<HOLDER>, vararg args: Any?): ((View) -> HOLDER) {
+fun <HOLDER : RecyclerView.ViewHolder> getHolderCreator(holder: KClass<HOLDER>, vararg args: Any?): ((View) -> HOLDER) {
     if (args.isEmpty()) {
         return {
             holder.primaryConstructor!!.call(it)
