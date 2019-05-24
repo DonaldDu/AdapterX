@@ -7,10 +7,6 @@ import android.view.View
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
-abstract class IViewHolder<DATA>(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    abstract fun update(data: DATA, position: Int)
-}
-
 open class AdapterX<HOLDER : IViewHolder<DATA>, DATA>(
     context: Context,
     holder: KClass<HOLDER>,
@@ -21,6 +17,26 @@ open class AdapterX<HOLDER : IViewHolder<DATA>, DATA>(
         super.onBindViewHolder(holder, position)
         holder.update(getItem(position), position)
     }
+}
+
+open class AdapterWithDatas<HOLDER : IViewHolderWithDatas<DATA>, DATA>(
+    context: Context,
+    holder: KClass<HOLDER>,
+    list: List<DATA>? = null,
+    vararg args: Any?
+) : IAdapter<HOLDER, DATA>(context, list, getLayoutId(holder), getHolderCreator(holder, *args)) {
+    override fun onBindViewHolder(holder: HOLDER, position: Int) {
+        super.onBindViewHolder(holder, position)
+        holder.update(getItem(position), position, datas)
+    }
+}
+
+abstract class IViewHolder<DATA>(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    abstract fun update(data: DATA, position: Int)
+}
+
+abstract class IViewHolderWithDatas<DATA>(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    abstract fun update(data: DATA, position: Int, datas: List<DATA>)
 }
 
 @LayoutRes
