@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import java.lang.reflect.Constructor
 
 abstract class IAdapter<HOLDER : RecyclerView.ViewHolder, DATA>(
         context: Context,
@@ -18,7 +17,6 @@ abstract class IAdapter<HOLDER : RecyclerView.ViewHolder, DATA>(
 
     val datas: MutableList<DATA> = list as? MutableList ?: (list?.toMutableList() ?: mutableListOf())
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private var constructor: Constructor<HOLDER>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HOLDER {
         val itemView = inflater.inflate(layoutId, parent, false)
