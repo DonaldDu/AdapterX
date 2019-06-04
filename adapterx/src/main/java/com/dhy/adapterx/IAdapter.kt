@@ -10,12 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 
 abstract class IAdapter<HOLDER : RecyclerView.ViewHolder, DATA>(
-        context: Context,
-        list: List<DATA>?,
-        @param:LayoutRes val layoutId: Int,
-        private val holderCreator: ((View) -> HOLDER)) : RecyclerView.Adapter<HOLDER>() {
+    context: Context,
+    list: List<DATA>?,
+    @param:LayoutRes val layoutId: Int,
+    private val holderCreator: ((View) -> HOLDER)
+) : RecyclerView.Adapter<HOLDER>() {
 
-    val datas: MutableList<DATA> = list as? MutableList ?: (list?.toMutableList() ?: mutableListOf())
+    var datas: MutableList<DATA> = list as? MutableList ?: (list?.toMutableList() ?: mutableListOf())
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HOLDER {
