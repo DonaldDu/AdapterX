@@ -1,4 +1,4 @@
-# AdapterX
+# AdapterX  [![](https://jitpack.io/v/com.gitee.DonaldDu/AdapterX.svg)](https://jitpack.io/#com.gitee.DonaldDu/AdapterX)
 
 #### 介绍
 {**以下是码云平台说明，您可以替换此简介**
