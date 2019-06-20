@@ -16,19 +16,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val datas = (1..5).toList().map { it.toString() }
-        val adapterX = AdapterX(this, Holder::class, datas)
+        val datas = (1..5).toList()
+        val adapter = AdapterX(this, Holder::class, datas)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapterX
-        adapterX.setOnItemClickListener { }
+        recyclerView.adapter = adapter
+        adapter.setOnItemClickListener { }
     }
 
+    /**
+     *通过注解的方式指定ViewHolder的layout，方便查看。
+     * */
     @LayoutId(R.layout.item)
-    private class Holder(v: View) : IViewHolder<String>(v) {
-        override fun update(data: String, position: Int) {
+    private class Holder(v: View) : IViewHolder<Int>(v) {
+        override fun update(data: Int, position: Int) {
             itemView.run {
-                tvName.text = data
-                tvCode.text = position.toString()
+                tvName.text = "data: $data"
+                tvCode.text = "position $position"
             }
         }
     }
