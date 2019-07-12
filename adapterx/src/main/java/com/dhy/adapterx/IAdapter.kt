@@ -58,26 +58,38 @@ abstract class IAdapter<HOLDER : RecyclerView.ViewHolder, DATA>(
 data class ClickedItem(val v: View, val postion: Int)
 
 inline fun <reified T> View.getTagX(): T {
-    val datas = findRecyclerViewHolderTag()
+    val datas = findRecyclerViewHolderTag()!!
     return datas[T::class.java.name] as T
 }
 
+inline fun <reified T> View.getTagXOrNull(): T? {
+    val datas = findRecyclerViewHolderTag(false)
+    return datas?.get(T::class.java.name) as T?
+}
+
 fun View.setTagX(value: Any) {
-    val datas = findRecyclerViewHolderTag()
+    val datas = findRecyclerViewHolderTag()!!
     datas[value.javaClass.name] = value
 }
 
-
-fun View.findRecyclerViewHolderTag(): MutableMap<String, Any> {
-    val item = findViewByParent { it is RecyclerView } ?: throw IllegalStateException("tagx only used for RecyclerViewHolder")
-    val stored = item.getTag(R.id.RECYCLER_VIEW_VIEW_HOLDER_TAGX)
-    return if (stored == null) {
-        val d = mutableMapOf<String, Any>()
-        setTag(R.id.RECYCLER_VIEW_VIEW_HOLDER_TAGX, d)
-        d
+/**
+ *@param sure of RecyclerViewHolder
+ * */
+fun View.findRecyclerViewHolderTag(sure: Boolean = true): MutableMap<String, Any>? {
+    val item = findViewByParent { it is RecyclerView }
+    return if (item == null) {
+        if (sure) throw IllegalStateException("tagx only used for RecyclerViewHolder")
+        else null
     } else {
-        @Suppress("UNCHECKED_CAST")
-        stored as MutableMap<String, Any>
+        val stored = item.getTag(R.id.RECYCLER_VIEW_VIEW_HOLDER_TAGX)
+        if (stored == null) {
+            val d = mutableMapOf<String, Any>()
+            item.setTag(R.id.RECYCLER_VIEW_VIEW_HOLDER_TAGX, d)
+            d
+        } else {
+            @Suppress("UNCHECKED_CAST")
+            stored as MutableMap<String, Any>
+        }
     }
 }
 
