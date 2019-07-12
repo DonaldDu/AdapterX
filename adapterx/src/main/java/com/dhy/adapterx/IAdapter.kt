@@ -27,7 +27,7 @@ abstract class IAdapter<HOLDER : RecyclerView.ViewHolder, DATA>(
     @CallSuper
     override fun onBindViewHolder(holder: HOLDER, position: Int) {
         if (onItemClickListener != null) {
-            holder.itemView.itemPosition = position
+            holder.itemView.setTagX(position)
             holder.itemView.setOnClickListener(onClickListener)
         }
     }
@@ -37,13 +37,13 @@ abstract class IAdapter<HOLDER : RecyclerView.ViewHolder, DATA>(
     }
 
     private val onClickListener = View.OnClickListener {
-        val position = it.itemPosition
+        val position: Int = it.getTagX()
         onItemClickListener?.invoke(ClickedItem(it, position))
     }
 
     private var onItemClickListener: ((ClickedItem) -> Unit)? = null
     fun setOnItemClickListener(listener: (ClickedItem) -> Unit) {
-        onItemClickListener = { listener(it) }
+        onItemClickListener = listener
     }
 
     fun getItem(position: Int): DATA {
@@ -57,7 +57,34 @@ abstract class IAdapter<HOLDER : RecyclerView.ViewHolder, DATA>(
 
 data class ClickedItem(val v: View, val postion: Int)
 
-var View.itemPosition: Int
-    get() = getTag(R.id.holder_item_position) as Int
-    set(value) = setTag(R.id.holder_item_position, value)
+inline fun <reified T> View.getTagX(): T {
+    val datas = findRecyclerViewHolderTag()
+    return datas[T::class.java.name] as T
+}
 
+fun View.setTagX(value: Any) {
+    val datas = findRecyclerViewHolderTag()
+    datas[value.javaClass.name] = value
+}
+
+
+fun View.findRecyclerViewHolderTag(): MutableMap<String, Any> {
+    val item = findViewByParent { it is RecyclerView } ?: throw IllegalStateException("tagx only used for RecyclerViewHolder")
+    val stored = item.getTag(R.id.RECYCLER_VIEW_VIEW_HOLDER_TAGX)
+    return if (stored == null) {
+        val d = mutableMapOf<String, Any>()
+        setTag(R.id.RECYCLER_VIEW_VIEW_HOLDER_TAGX, d)
+        d
+    } else {
+        @Suppress("UNCHECKED_CAST")
+        stored as MutableMap<String, Any>
+    }
+}
+
+fun View.findViewByParent(test: (parent: ViewGroup) -> Boolean): View? {
+    val p = parent
+    return if (p is ViewGroup) {
+        if (test(p)) this
+        else p.findViewByParent(test)
+    } else null
+}
