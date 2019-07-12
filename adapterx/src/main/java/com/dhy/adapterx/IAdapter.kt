@@ -62,7 +62,7 @@ inline fun <reified T> View.getTagX(): T {
     return datas[T::class.java.name] as T
 }
 
-inline fun <reified T> View.getTagXOrNull(): T? {
+inline fun <reified T> View.getTagxOrNull(): T? {
     val datas = findRecyclerViewHolderTag(false)
     return datas?.get(T::class.java.name) as T?
 }
