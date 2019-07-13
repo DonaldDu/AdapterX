@@ -76,7 +76,9 @@ fun View.setTagX(value: Any) {
  *@param sure of RecyclerViewHolder
  * */
 fun View.findRecyclerViewHolderTag(sure: Boolean = true): MutableMap<String, Any>? {
-    val item = findViewByParent { it is RecyclerView }
+    val item = findViewByParent2 { self, p ->
+        p is RecyclerView || self.layoutParams is RecyclerView.LayoutParams
+    }
     return if (item == null) {
         if (sure) throw IllegalStateException("tagx only used for RecyclerViewHolder")
         else null
@@ -93,10 +95,8 @@ fun View.findRecyclerViewHolderTag(sure: Boolean = true): MutableMap<String, Any
     }
 }
 
-fun View.findViewByParent(test: (parent: ViewGroup) -> Boolean): View? {
-    val p = parent
-    return if (p is ViewGroup) {
-        if (test(p)) this
-        else p.findViewByParent(test)
-    } else null
+fun View.findViewByParent2(test: (self: View, parent: ViewGroup?) -> Boolean): View? {
+    val p = parent as ViewGroup?
+    return if (test(this, p)) this
+    else p?.findViewByParent2(test)
 }

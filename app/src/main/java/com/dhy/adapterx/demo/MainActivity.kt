@@ -2,8 +2,11 @@ package com.dhy.adapterx.demo
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.Toast
 import com.dhy.adapterx.AdapterX
 import com.dhy.adapterx.IViewHolder
 import com.dhy.adapterx.LayoutId
@@ -19,8 +22,11 @@ class MainActivity : AppCompatActivity() {
         val datas = (1..5).toList()
         val adapter = AdapterX(this, Holder::class, datas)
         recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         recyclerView.adapter = adapter
-        adapter.setOnItemClickListener { }
+        adapter.setOnItemClickListener {
+            Toast.makeText(this, "position ${it.postion}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     /**
