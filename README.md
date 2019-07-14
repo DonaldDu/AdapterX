@@ -1,7 +1,7 @@
 # AdapterX  [![](https://jitpack.io/v/DonaldDu/AdapterX.svg)](https://jitpack.io/#DonaldDu/AdapterX)
 
 快捷定义RecyclerView.Adapter的方法
-#### 用例
+
 
 ```
 
