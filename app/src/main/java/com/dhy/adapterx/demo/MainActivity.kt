@@ -1,8 +1,8 @@
 package com.dhy.adapterx.demo
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.View
 import com.dhy.adapterx.AdapterX
 import com.dhy.adapterx.IViewHolder
@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         val datas = (1..5).toList()
         val adapter = AdapterX(this, Holder::class, datas)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         recyclerView.adapter = adapter
         adapter.setOnItemClickListener { }
     }
