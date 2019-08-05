@@ -8,7 +8,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 28
         versionCode 1
-        versionName "0.1.9"
+        versionName "0.1.9x"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         packagingOptions {
 //            exclude 'META-INF/**.kotlin_module'//排除后无法找到全局扩展方法，需要在app中排除
@@ -26,7 +26,6 @@ publish {
     userOrg = 'user'
     groupId = 'com.gitee.DonaldDu'
     artifactId = 'AdapterX'
-    //noinspection GroovyAccessibility
     publishVersion = android.defaultConfig.versionName
     desc = 'desc'
     website = 'website'
@@ -41,6 +40,4 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }
