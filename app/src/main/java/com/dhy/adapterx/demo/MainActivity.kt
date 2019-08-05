@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.View
+import android.widget.Toast
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.dhy.adapterx.AdapterX
 import com.dhy.adapterx.IViewHolder
 import com.dhy.adapterx.LayoutId
@@ -18,9 +20,12 @@ class MainActivity : AppCompatActivity() {
 
         val datas = (1..5).toList()
         val adapter = AdapterX(this, Holder::class, datas)
-        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         recyclerView.adapter = adapter
-        adapter.setOnItemClickListener { }
+        adapter.setOnItemClickListener {
+            Toast.makeText(this, "position ${it.postion}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     /**
