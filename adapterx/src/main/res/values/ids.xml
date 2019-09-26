@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item type="id" name="RECYCLER_VIEW_VIEW_HOLDER_TAGX"/>
+    <item name="RECYCLER_VIEW_VIEW_HOLDER_TAGX" type="id" />
+    <dimen name="dp">1dp</dimen>
 </resources>
