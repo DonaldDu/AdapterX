@@ -11,7 +11,7 @@ open class AdapterX<HOLDER : IViewHolder<DATA>, DATA>(
     holder: KClass<HOLDER>,
     list: List<DATA>? = null,
     vararg args: Any?
-) : IAdapter<HOLDER, DATA>(context, list, getLayoutId(holder), getHolderCreator(holder, *args)) {
+) : IAdapter<HOLDER, DATA>(context, list, getLayoutId(context, holder), getHolderCreator(holder, *args)) {
     override fun onBindViewHolder(holder: HOLDER, position: Int) {
         super.onBindViewHolder(holder, position)
         holder.update(getItem(position), position)
@@ -23,7 +23,7 @@ open class AdapterWithDatas<HOLDER : IViewHolderWithDatas<DATA>, DATA>(
     holder: KClass<HOLDER>,
     list: List<DATA>? = null,
     vararg args: Any?
-) : IAdapter<HOLDER, DATA>(context, list, getLayoutId(holder), getHolderCreator(holder, *args)) {
+) : IAdapter<HOLDER, DATA>(context, list, getLayoutId(context, holder), getHolderCreator(holder, *args)) {
     override fun onBindViewHolder(holder: HOLDER, position: Int) {
         super.onBindViewHolder(holder, position)
         holder.update(getItem(position), position, datas)
@@ -45,8 +45,14 @@ abstract class IViewHolderWithDatas<DATA>(itemView: View) : RecyclerView.ViewHol
 }
 
 @LayoutRes
-fun <HOLDER : RecyclerView.ViewHolder> getLayoutId(holder: KClass<HOLDER>): Int {
-    return holder.java.getAnnotation(LayoutId::class.java)!!.value
+fun <HOLDER : RecyclerView.ViewHolder> getLayoutId(context: Context, holder: KClass<HOLDER>): Int {
+    val cls = holder.java
+    return if (cls.isAnnotationPresent(LayoutId::class.java)) {
+        cls.getAnnotation(LayoutId::class.java)!!.value
+    } else {
+        val name = cls.getAnnotation(LayoutName::class.java)!!.value
+        context.resources.getIdentifier(name, "layout", context.packageName)
+    }
 }
 
 @Suppress("UNCHECKED_CAST")

@@ -8,7 +8,7 @@ import android.view.View
 import android.widget.Toast
 import com.dhy.adapterx.AdapterX
 import com.dhy.adapterx.IViewHolder
-import com.dhy.adapterx.LayoutId
+import com.dhy.adapterx.LayoutName
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item.view.*
 
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     /**
      *通过注解的方式指定ViewHolder的layout，方便查看。
      * */
-    @LayoutId(R.layout.item)
+    @LayoutName("item")
     private class Holder(v: View) : IViewHolder<Int>(v) {
         override fun update(data: Int, position: Int) {
             itemView.run {
