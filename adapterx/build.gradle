@@ -8,10 +8,10 @@ android {
         minSdkVersion 14
         targetSdkVersion 28
         versionCode 1
-        versionName "0.2.0"
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         packagingOptions {
-//            exclude 'META-INF/**.kotlin_module'//排除后无法找到全局扩展方法，需要在app中排除
+//            exclude 'META-INF/**.kotlin_module'//排除后无法找到全局扩展方法，需要在app中排除，以解决文件名冲突
         }
     }
 

@@ -11,6 +11,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        packagingOptions {
+            exclude 'META-INF/**.kotlin_module'//在app中排除，以解决文件名冲突
+        }
     }
     buildTypes {
         release {
