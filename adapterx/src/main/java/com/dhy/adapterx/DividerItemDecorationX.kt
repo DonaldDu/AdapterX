@@ -31,7 +31,7 @@ class DividerItemDecorationX(context: Context, verticalList: Boolean = true, div
             val themeDivider = getThemeDivider(context)
             if (themeDivider != null) mDivider = themeDivider
             else {
-                Log.w("DividerItem", "@android:attr/listDivider was not set in the theme used for this DividerItemDecoration. Please set that attribute or call setDrawable()")
+                Log.w("DividerItem", "android:listDivider was not set in the theme used for this DividerItemDecoration. Please set that attribute or call setDrawable()")
             }
         }
         setOrientation(verticalList)
