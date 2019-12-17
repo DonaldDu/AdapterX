@@ -45,13 +45,13 @@ abstract class IViewHolderWithDatas<DATA>(itemView: View) : RecyclerView.ViewHol
 }
 
 @LayoutRes
-fun <HOLDER : RecyclerView.ViewHolder> getLayoutId(context: Context, holder: KClass<HOLDER>): Int {
+fun <HOLDER : RecyclerView.ViewHolder> getLayoutId(context: Context?, holder: KClass<HOLDER>): Int {
     val cls = holder.java
     return if (cls.isAnnotationPresent(LayoutId::class.java)) {
         cls.getAnnotation(LayoutId::class.java)!!.value
     } else {
         val name = cls.getAnnotation(LayoutName::class.java)!!.value
-        context.resources.getIdentifier(name, "layout", context.packageName)
+        context!!.resources.getIdentifier(name, "layout", context.packageName)
     }
 }
 

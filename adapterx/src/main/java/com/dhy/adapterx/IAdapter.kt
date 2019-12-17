@@ -63,26 +63,21 @@ inline fun <reified T> View.getTagX(): T {
 }
 
 inline fun <reified T> View.getTagxOrNull(): T? {
-    val datas = findRecyclerViewHolderTag(false)
+    val datas = findRecyclerViewHolderTag()
     return datas?.get(T::class.java.name) as T?
 }
 
 fun View.setTagX(value: Any) {
-    val datas = findRecyclerViewHolderTag()!!
-    datas[value.javaClass.name] = value
+    val datas = findRecyclerViewHolderTag()
+    if (datas != null) datas[value.javaClass.name] = value
 }
 
-/**
- *@param sure of RecyclerViewHolder
- * */
-fun View.findRecyclerViewHolderTag(sure: Boolean = true): MutableMap<String, Any>? {
-    val item = findViewByParent2 { self, p ->
+fun View.findRecyclerViewHolderTag(): MutableMap<String, Any>? {
+    val item = findViewByParent { self, p ->
         p is RecyclerView || self.layoutParams is RecyclerView.LayoutParams
     }
-    return if (item == null) {
-        if (sure) throw IllegalStateException("tagx only used for RecyclerViewHolder")
-        else null
-    } else {
+    return if (item == null) null
+    else {
         val stored = item.getTag(R.id.RECYCLER_VIEW_VIEW_HOLDER_TAGX)
         if (stored == null) {
             val d = mutableMapOf<String, Any>()
@@ -95,8 +90,8 @@ fun View.findRecyclerViewHolderTag(sure: Boolean = true): MutableMap<String, Any
     }
 }
 
-fun View.findViewByParent2(test: (self: View, parent: ViewGroup?) -> Boolean): View? {
-    val p = parent as ViewGroup?
+fun View.findViewByParent(test: (self: View, parent: ViewGroup?) -> Boolean): View? {
+    val p = parent as? ViewGroup
     return if (test(this, p)) this
-    else p?.findViewByParent2(test)
+    else p?.findViewByParent(test)
 }
