@@ -11,22 +11,10 @@ open class AdapterX<HOLDER : IViewHolder<DATA>, DATA>(
     holder: KClass<HOLDER>,
     list: List<DATA>? = null,
     vararg args: Any?
-) : IAdapter<HOLDER, DATA>(context, list, getLayoutId(context, holder), getHolderCreator(holder, *args)) {
+) : IAdapter<HOLDER, DATA>(context, list, getLayoutId(context, holder, *args), getHolderCreator(holder, *args)) {
     override fun onBindViewHolder(holder: HOLDER, position: Int) {
         super.onBindViewHolder(holder, position)
         holder.update(getItem(position), position)
-    }
-}
-
-open class AdapterWithDatas<HOLDER : IViewHolderWithDatas<DATA>, DATA>(
-    context: Context,
-    holder: KClass<HOLDER>,
-    list: List<DATA>? = null,
-    vararg args: Any?
-) : IAdapter<HOLDER, DATA>(context, list, getLayoutId(context, holder), getHolderCreator(holder, *args)) {
-    override fun onBindViewHolder(holder: HOLDER, position: Int) {
-        super.onBindViewHolder(holder, position)
-        holder.update(getItem(position), position, datas)
     }
 }
 
@@ -40,18 +28,25 @@ abstract class IViewHolder<DATA>(itemView: View) : RecyclerView.ViewHolder(itemV
     }
 }
 
-abstract class IViewHolderWithDatas<DATA>(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    abstract fun update(data: DATA, position: Int, datas: List<DATA>)
-}
+abstract class IViewHolder2<DATA>(@LayoutRes internal val layoutId: Int, itemView: View) : IViewHolder<DATA>(itemView)
 
 @LayoutRes
-fun <HOLDER : RecyclerView.ViewHolder> getLayoutId(context: Context?, holder: KClass<HOLDER>): Int {
+fun <HOLDER : RecyclerView.ViewHolder> getLayoutId(context: Context?, holder: KClass<HOLDER>, vararg args: Any?): Int {
     val cls = holder.java
-    return if (cls.isAnnotationPresent(LayoutId::class.java)) {
-        cls.getAnnotation(LayoutId::class.java)!!.value
-    } else {
-        val name = cls.getAnnotation(LayoutName::class.java)!!.value
-        context!!.resources.getIdentifier(name, "layout", context.packageName)
+    return when {
+        IViewHolder2::class.java.isAssignableFrom(cls) -> {
+            val creator = getHolderCreator(holder, *args)
+            val h = creator(View(context!!)) as IViewHolder2<*>
+            return h.layoutId
+        }
+        cls.isAnnotationPresent(LayoutId::class.java) -> {
+            cls.getAnnotation(LayoutId::class.java)!!.value
+        }
+        cls.isAnnotationPresent(LayoutName::class.java) -> {
+            val name = cls.getAnnotation(LayoutName::class.java)!!.value
+            context!!.resources.getIdentifier(name, "layout", context.packageName)
+        }
+        else -> throw IllegalArgumentException("getLayoutId failed for holder: ${cls.name}")
     }
 }
 
