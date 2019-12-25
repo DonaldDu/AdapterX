@@ -10,10 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 
 abstract class IAdapter<HOLDER : RecyclerView.ViewHolder, DATA>(
-    context: Context,
-    list: List<DATA>?,
-    @param:LayoutRes val layoutId: Int,
-    private val holderCreator: ((View) -> HOLDER)
+    context: Context, list: List<DATA>?, @LayoutRes val layoutId: Int, private val holderCreator: ((View) -> HOLDER)
 ) : RecyclerView.Adapter<HOLDER>() {
 
     var datas: MutableList<DATA> = list as? MutableList ?: (list?.toMutableList() ?: mutableListOf())
@@ -73,9 +70,7 @@ fun View.setTagX(value: Any) {
 }
 
 fun View.findRecyclerViewHolderTag(): MutableMap<String, Any>? {
-    val item = findViewByParent { self, p ->
-        p is RecyclerView || self.layoutParams is RecyclerView.LayoutParams
-    }
+    val item = findRvItemView()
     return if (item == null) null
     else {
         val stored = item.getTag(R.id.RECYCLER_VIEW_VIEW_HOLDER_TAGX)
@@ -90,8 +85,10 @@ fun View.findRecyclerViewHolderTag(): MutableMap<String, Any>? {
     }
 }
 
-fun View.findViewByParent(test: (self: View, parent: ViewGroup?) -> Boolean): View? {
-    val p = parent as? ViewGroup
-    return if (test(this, p)) this
-    else p?.findViewByParent(test)
+private fun View.findRvItemView(): View? {
+    return if (layoutParams is RecyclerView.LayoutParams) this
+    else {
+        val p = parent as? View
+        p?.findRvItemView()
+    }
 }

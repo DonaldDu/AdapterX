@@ -7,10 +7,7 @@ import android.view.View
 import kotlin.reflect.KClass
 
 open class AdapterX<HOLDER : IViewHolder<DATA>, DATA>(
-    context: Context,
-    holder: KClass<HOLDER>,
-    list: List<DATA>? = null,
-    vararg args: Any?
+    context: Context, holder: KClass<HOLDER>, list: List<DATA>? = null, vararg args: Any?
 ) : IAdapter<HOLDER, DATA>(context, list, getLayoutId(context, holder, *args), getHolderCreator(holder, *args)) {
     override fun onBindViewHolder(holder: HOLDER, position: Int) {
         super.onBindViewHolder(holder, position)
@@ -20,16 +17,11 @@ open class AdapterX<HOLDER : IViewHolder<DATA>, DATA>(
 
 abstract class IViewHolder<DATA>(itemView: View) : RecyclerView.ViewHolder(itemView) {
     abstract fun update(data: DATA, position: Int)
-
-    fun getAdapter(): AdapterX<*, DATA> {
-        val rv = itemView.parent as RecyclerView
-        @Suppress("UNCHECKED_CAST")
-        return rv.adapter as AdapterX<*, DATA>
-    }
 }
 
 abstract class IViewHolder2<DATA>(@LayoutRes internal val layoutId: Int, itemView: View) : IViewHolder<DATA>(itemView)
 
+@Suppress("DEPRECATION")
 @LayoutRes
 fun <HOLDER : RecyclerView.ViewHolder> getLayoutId(context: Context?, holder: KClass<HOLDER>, vararg args: Any?): Int {
     val cls = holder.java
