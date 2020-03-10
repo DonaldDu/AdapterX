@@ -1,1 +1,2 @@
-include ':app', ':adapterx'
+rootProject.name='AdapterX'
+include ':app', ':lib'
