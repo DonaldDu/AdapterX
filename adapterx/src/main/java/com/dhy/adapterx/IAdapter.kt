@@ -10,15 +10,25 @@ import android.view.View
 import android.view.ViewGroup
 
 abstract class IAdapter<HOLDER : RecyclerView.ViewHolder, DATA>(
-    context: Context, list: List<DATA>?, @LayoutRes val layoutId: Int, private val holderCreator: ((View) -> HOLDER)
+    context: Context, list: List<DATA>?, params: AdapterParams<HOLDER>
 ) : RecyclerView.Adapter<HOLDER>() {
-
-    var datas: MutableList<DATA> = list as? MutableList ?: (list?.toMutableList() ?: mutableListOf())
+    @LayoutRes
+    val layoutId = params.layoutId
+    private val holderCreator = params.holderCreator
     private val inflater: LayoutInflater = LayoutInflater.from(context)
+    var datas: MutableList<DATA> = list as? MutableList ?: (list?.toMutableList() ?: mutableListOf())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HOLDER {
         val itemView = inflater.inflate(layoutId, parent, false)
-        return holderCreator(itemView)
+        val holder = holderCreator(itemView)
+        if (holder is IAdapterDatas<*>) loadDatas2Holder(holder)
+        return holder
+    }
+
+    private fun loadDatas2Holder(holder: HOLDER) {
+        @Suppress("UNCHECKED_CAST")
+        val h = holder as IViewHolder<DATA>
+        h.getDatas = { datas }
     }
 
     @CallSuper
@@ -33,13 +43,17 @@ abstract class IAdapter<HOLDER : RecyclerView.ViewHolder, DATA>(
         return datas[position]
     }
 
-    private val onClickListener = View.OnClickListener {
-        val position: Int = it.getTagX()
-        onItemClickListener?.invoke(ClickedItem(it, position))
+    open fun getClickedItem(v: View): ClickedItem<DATA> {
+        val position: Int = v.getTagX()
+        return ClickedItem(v, position, getItem(position))
     }
 
-    private var onItemClickListener: ((ClickedItem) -> Unit)? = null
-    fun setOnItemClickListener(listener: (ClickedItem) -> Unit) {
+    private val onClickListener = View.OnClickListener {
+        if (onItemClickListener != null) onItemClickListener!!.invoke(getClickedItem(it))
+    }
+
+    private var onItemClickListener: ((ClickedItem<DATA>) -> Unit)? = null
+    fun setOnItemClickListener(listener: (ClickedItem<DATA>) -> Unit) {
         onItemClickListener = listener
     }
 
@@ -52,7 +66,7 @@ abstract class IAdapter<HOLDER : RecyclerView.ViewHolder, DATA>(
     }
 }
 
-data class ClickedItem(val v: View, val postion: Int)
+data class ClickedItem<DATA>(val v: View, val postion: Int, val data: DATA)
 
 inline fun <reified T> View.getTagX(): T {
     val datas = findRecyclerViewHolderTag()!!
