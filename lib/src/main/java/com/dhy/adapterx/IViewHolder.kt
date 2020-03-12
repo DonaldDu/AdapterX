@@ -5,6 +5,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 
 abstract class IViewHolder<DATA>(itemView: View, @LayoutRes internal val layoutId: Int = -1) : RecyclerView.ViewHolder(itemView) {
+    init {
+        if (itemView is HolderCreatorView) itemView.tag = layoutId
+    }
+
     /**
      * imp IAdapterDatas to use this parameter
      * */

@@ -12,7 +12,6 @@ import static java.lang.annotation.ElementType.TYPE;
  * use {@link IViewHolder} then set value to parameter.
  * eg: IViewHolder(v, R.layout.item)
  */
-@Deprecated
 @Retention(RetentionPolicy.RUNTIME)
 @Target({TYPE})
 public @interface LayoutId {

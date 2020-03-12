@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         init(recyclerView, Holder::class)
         init(recyclerView2, Holder2::class)
-        init(recyclerView3, Holder3::class)
+        init(recyclerView3, HolderErrorTest::class)
     }
 
     private fun init(rv: RecyclerView, holder: KClass<out IViewHolder<Int>>) {
@@ -49,7 +49,13 @@ class MainActivity : AppCompatActivity() {
     /**
      *  通过【参数】指定layout，方便查看。【支持】Lib 项目。推荐使用，App和库项目都支持。
      * */
-    private class Holder2(v: View) : IViewHolder2<Int>(R.layout.item, v) {
+    private class Holder2(v: View) : IViewHolder<Int>(v, R.layout.item) {
+        init {
+            itemView.run {
+                tvName.text = "test error"
+            }
+        }
+
         override fun update(data: Int, position: Int) {
             itemView.run {
                 tvName.text = "data: $data"

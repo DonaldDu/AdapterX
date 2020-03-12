@@ -4,38 +4,10 @@ import android.content.Context
 import android.support.annotation.LayoutRes
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import java.lang.Exception
 import kotlin.reflect.KClass
 
 val RecyclerView.ViewHolder.context: Context get() = itemView.context
-
-@Suppress("DEPRECATION")
-@LayoutRes
-fun <HOLDER : RecyclerView.ViewHolder> getLayoutId(context: Context?, holder: KClass<HOLDER>, vararg args: Any?): Int {
-    if (context != null) {
-        val layoutId = getLayoutIdInParam(context, holder, *args)
-        if (layoutId != -1) return layoutId
-    }
-    val cls = holder.java
-    return when {
-        cls.isAnnotationPresent(LayoutId::class.java) -> {
-            cls.getAnnotation(LayoutId::class.java)!!.value
-        }
-        cls.isAnnotationPresent(LayoutName::class.java) -> {
-            val name = cls.getAnnotation(LayoutName::class.java)!!.value
-            context!!.resources.getIdentifier(name, "layout", context.packageName)
-        }
-        else -> throw IllegalArgumentException("getLayoutId failed for holder: ${cls.name}")
-    }
-}
-
-private fun <HOLDER : RecyclerView.ViewHolder> getLayoutIdInParam(context: Context, holder: KClass<HOLDER>, vararg args: Any?): Int {
-    val creator = getHolderCreator(holder, *args)
-    val h = creator(View(context)) as IViewHolder<*>
-    return h.layoutId
-}
-
-@Deprecated(message = "use IViewHolder instead", replaceWith = ReplaceWith("IViewHolder<DATA>"))
-abstract class IViewHolder2<DATA>(layoutId: Int, itemView: View) : IViewHolder<DATA>(itemView, layoutId)
 
 @Suppress("UNCHECKED_CAST")
 fun <HOLDER : RecyclerView.ViewHolder> getHolderCreator(holder: KClass<HOLDER>, vararg args: Any?): ((View) -> HOLDER) {
@@ -55,8 +27,13 @@ fun <HOLDER : RecyclerView.ViewHolder> getAdapterParams(context: Context?, holde
     val creator = getHolderCreator(holder, *args)
     var layoutId = -1
     if (context != null) {
-        val h = creator(View(context)) as IViewHolder<*>
-        layoutId = h.layoutId
+        val v = HolderCreatorView(context)
+        layoutId = try {
+            val h = creator(v) as IViewHolder<*>
+            h.layoutId
+        } catch (e: Exception) {
+            v.tag as Int
+        }
     }
     if (layoutId == -1) {
         val cls = holder.java
