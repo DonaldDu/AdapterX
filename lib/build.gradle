@@ -8,13 +8,14 @@ android {
         minSdkVersion 14
         targetSdkVersion 28
         versionCode 1
-        versionName "1.2.1"
+        versionName "1.2.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        packagingOptions {
-//            exclude 'META-INF/**.kotlin_module'//排除后无法找到全局扩展方法，需要在app中排除，以解决文件名冲突
-        }
     }
-
+    compileOptions {
+        def PUBLISH_GROUP_ID = 'com.github.DonaldDu'
+        def PUBLISH_ARTIFACT_ID = rootProject.name
+        kotlinOptions.freeCompilerArgs += ['-module-name', "${PUBLISH_GROUP_ID}_${PUBLISH_ARTIFACT_ID}"]
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -44,4 +45,10 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+configurations.all {
+    resolutionStrategy.eachDependency {
+        def requested = it.requested
+        if (requested.group == 'org.jetbrains.kotlin') it.useVersion kotlin_version
+    }
 }
