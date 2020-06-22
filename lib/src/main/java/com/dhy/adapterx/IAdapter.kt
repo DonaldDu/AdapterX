@@ -39,10 +39,6 @@ abstract class IAdapter<HOLDER : RecyclerView.ViewHolder, DATA>(
         }
     }
 
-    fun getItemData(position: Int): DATA {
-        return datas[position]
-    }
-
     open fun getClickedItem(v: View): ClickedItem<DATA> {
         val position: Int = v.getTagX()
         return ClickedItem(v, position, getItem(position))
@@ -57,7 +53,7 @@ abstract class IAdapter<HOLDER : RecyclerView.ViewHolder, DATA>(
         onItemClickListener = listener
     }
 
-    fun getItem(position: Int): DATA {
+    open fun getItem(position: Int): DATA {
         return datas[position]
     }
 

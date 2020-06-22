@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
 
     /**
      *  通过【注解】LayoutName 指定 layout，不方便查看。
-     *  不推荐使用，仅为兼容旧代码，可以替换成 IViewHolder2
+     *  不推荐使用，仅为兼容旧代码
      * */
     @LayoutName("item")
     private class Holder3(v: View) : IViewHolder<Int>(v) {
