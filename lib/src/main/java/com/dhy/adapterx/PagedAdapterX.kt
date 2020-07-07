@@ -6,20 +6,23 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import kotlin.reflect.KClass
 
-class PagedAdapterX<DATA : IDiff, HOLDER : IViewHolder<DATA>>(
+class PagedAdapterX<DATA : IDiff<DATA>, HOLDER : IViewHolder<DATA>>(
     context: Context,
     holder: KClass<HOLDER>,
-    list: List<DATA>? = null,
     vararg args: Any?
-) : PagedListAdapter<DATA, HOLDER>(DiffCallback()),
-    IAdapterHelper<DATA, HOLDER> by AdapterHelper(context, holder, list, *args) {
-
+) : PagedListAdapter<DATA, HOLDER>(DiffCallback()), IAdapterX<DATA, HOLDER> {
+    override var datas: MutableList<DATA> = mutableListOf()
+    private val helper = AdapterHelper(this, context, holder, *args)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HOLDER {
-        return onCreateHolder(parent, viewType)
+        return helper.onCreateViewHolder(parent, viewType)
     }
 
     override fun onBindViewHolder(holder: HOLDER, position: Int) {
-        onBindHolder(holder, position)
+        helper.onBindViewHolder(holder, position)
+    }
+
+    override fun setOnItemClickListener(onItemClickListener: ((ClickedItem<DATA>) -> Unit)?) {
+        helper.setOnItemClickListener(onItemClickListener)
     }
 
     override fun getItemData(position: Int): DATA {
@@ -27,11 +30,11 @@ class PagedAdapterX<DATA : IDiff, HOLDER : IViewHolder<DATA>>(
     }
 }
 
-interface IDiff {
-    fun isSame(other: IDiff): Boolean
+interface IDiff<T : IDiff<T>> {
+    fun isSame(other: T): Boolean
 }
 
-class DiffCallback<T : IDiff> : DiffUtil.ItemCallback<T>() {
+class DiffCallback<T : IDiff<T>> : DiffUtil.ItemCallback<T>() {
     override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
         return oldItem.isSame(newItem)
     }

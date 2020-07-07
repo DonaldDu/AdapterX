@@ -7,6 +7,12 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/btPaging"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="paging" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -7,25 +7,22 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import kotlin.reflect.KClass
 
-interface IAdapterHelper<DATA, HOLDER : IHolder<DATA>> {
+interface IAdapterX<DATA, HOLDER : IHolder<DATA>> {
     var datas: MutableList<DATA>
-    fun onCreateHolder(parent: ViewGroup, viewType: Int): HOLDER
-    fun onBindHolder(holder: HOLDER, position: Int)
-
     fun getItemData(position: Int): DATA
+    fun setOnItemClickListener(onItemClickListener: ((ClickedItem<DATA>) -> Unit)?)
+}
 
-    open fun getClickedItem(v: View): ClickedItem<DATA> {
-        val position: Int = v.getTagX()
-        return ClickedItem(v, position, getItemData(position))
-    }
-
+interface IAdapterHelper<DATA, HOLDER : IHolder<DATA>> {
+    fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HOLDER
+    fun onBindViewHolder(holder: HOLDER, position: Int)
     fun setOnItemClickListener(onItemClickListener: ((ClickedItem<DATA>) -> Unit)?)
 }
 
 open class BaseAdapterHelper<DATA, HOLDER : IHolder<DATA>>(
+    val adapter: IAdapterX<DATA, HOLDER>,
     context: Context,
     holder: KClass<HOLDER>,
-    list: List<DATA>? = null,
     vararg args: Any?
 ) : IAdapterHelper<DATA, HOLDER> {
     private val params = getAdapterParams(context, holder, *args)
@@ -34,21 +31,21 @@ open class BaseAdapterHelper<DATA, HOLDER : IHolder<DATA>>(
     private val layoutId = params.layoutId
     private val holderCreator = params.holderCreator
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    override var datas: MutableList<DATA> = list as? MutableList ?: (list?.toMutableList() ?: mutableListOf())
-    override fun onCreateHolder(parent: ViewGroup, viewType: Int): HOLDER {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HOLDER {
         val itemView = inflater.inflate(layoutId, parent, false)
         return holderCreator(itemView)
     }
 
-    override fun onBindHolder(holder: HOLDER, position: Int) {
+    override fun onBindViewHolder(holder: HOLDER, position: Int) {
         if (itemClickListener != null) {
             holder.itemView.setTagX(position)
             holder.itemView.setOnClickListener(onClickListener)
         }
     }
 
-    override fun getItemData(position: Int): DATA {
-        return datas[position]
+    open fun getClickedItem(v: View): ClickedItem<DATA> {
+        val position: Int = v.getTagX()
+        return ClickedItem(v, position, adapter.getItemData(position))
     }
 
     private var itemClickListener: ((ClickedItem<DATA>) -> Unit)? = null
@@ -61,27 +58,27 @@ open class BaseAdapterHelper<DATA, HOLDER : IHolder<DATA>>(
     }
 }
 
-open class AdapterHelper<DATA, HOLDER : IViewHolder<DATA>>(
+class AdapterHelper<DATA, HOLDER : IViewHolder<DATA>>(
+    adapter: IAdapterX<DATA, HOLDER>,
     context: Context,
     holder: KClass<HOLDER>,
-    list: List<DATA>? = null,
     vararg args: Any?
-) : BaseAdapterHelper<DATA, HOLDER>(context, holder, list, *args) {
-    override fun onBindHolder(holder: HOLDER, position: Int) {
-        super.onBindHolder(holder, position)
-        holder.update(getItemData(position), position)
+) : BaseAdapterHelper<DATA, HOLDER>(adapter, context, holder, *args) {
+    override fun onBindViewHolder(holder: HOLDER, position: Int) {
+        super.onBindViewHolder(holder, position)
+        holder.update(adapter.getItemData(position), position)
     }
 }
 
-open class DatasAdapterHelper<DATA, HOLDER : IViewHolderDatas<DATA>>(
+class DatasAdapterHelper<DATA, HOLDER : IViewHolderDatas<DATA>>(
+    adapter: IAdapterX<DATA, HOLDER>,
     context: Context,
     holder: KClass<HOLDER>,
-    list: List<DATA>? = null,
     vararg args: Any?
-) : BaseAdapterHelper<DATA, HOLDER>(context, holder, list, *args) {
-    override fun onBindHolder(holder: HOLDER, position: Int) {
-        super.onBindHolder(holder, position)
-        holder.update(getItemData(position), position, datas)
+) : BaseAdapterHelper<DATA, HOLDER>(adapter, context, holder, *args) {
+    override fun onBindViewHolder(holder: HOLDER, position: Int) {
+        super.onBindViewHolder(holder, position)
+        holder.update(adapter.getItemData(position), position, adapter.datas)
     }
 }
 

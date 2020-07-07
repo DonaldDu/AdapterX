@@ -1,6 +1,8 @@
 package com.dhy.adapterx.demo
 
-import android.arch.paging.PositionalDataSource
+import androidx.paging.DataSource
+import androidx.paging.PositionalDataSource
+
 
 class DbDataSource : PositionalDataSource<Page>() {
     private val db = DbUtil()
@@ -12,6 +14,12 @@ class DbDataSource : PositionalDataSource<Page>() {
     override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<Page>) {
         val datas = db.getImagePages(params.startPosition, params.loadSize)
         callback.onResult(datas)
+    }
+}
+
+class DbDataSourceFactory : DataSource.Factory<Int, Page>() {
+    override fun create(): DataSource<Int, Page> {
+        return DbDataSource()
     }
 }
 

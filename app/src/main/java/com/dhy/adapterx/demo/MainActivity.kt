@@ -1,5 +1,6 @@
 package com.dhy.adapterx.demo
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -21,6 +22,9 @@ class MainActivity : AppCompatActivity() {
 
         init(recyclerView, Holder::class)
         init(recyclerViewAnno, HolderAnno::class)
+        btPaging.setOnClickListener {
+            startActivity(Intent(this, PagingActivity::class.java))
+        }
     }
 
     private fun init(rv: RecyclerView, holder: KClass<out IViewHolder<Int>>) {

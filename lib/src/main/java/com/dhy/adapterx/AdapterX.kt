@@ -5,19 +5,24 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.reflect.KClass
 
-open class AdapterX<HOLDER : IViewHolder<DATA>, DATA>(
+class AdapterX<HOLDER : IViewHolder<DATA>, DATA>(
     context: Context,
     holder: KClass<HOLDER>,
     list: List<DATA>? = null,
     vararg args: Any?
-) : RecyclerView.Adapter<HOLDER>(),
-    IAdapterHelper<DATA, HOLDER> by AdapterHelper(context, holder, list, *args) {
+) : RecyclerView.Adapter<HOLDER>(), IAdapterX<DATA, HOLDER> {
+    override var datas: MutableList<DATA> = list as? MutableList ?: (list?.toMutableList() ?: mutableListOf())
+    private val helper = AdapterHelper(this, context, holder, *args)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HOLDER {
-        return onCreateHolder(parent, viewType)
+        return helper.onCreateViewHolder(parent, viewType)
     }
 
     override fun onBindViewHolder(holder: HOLDER, position: Int) {
-        onBindHolder(holder, position)
+        helper.onBindViewHolder(holder, position)
+    }
+
+    override fun setOnItemClickListener(onItemClickListener: ((ClickedItem<DATA>) -> Unit)?) {
+        helper.setOnItemClickListener(onItemClickListener)
     }
 
     override fun getItemData(position: Int): DATA {
@@ -29,19 +34,24 @@ open class AdapterX<HOLDER : IViewHolder<DATA>, DATA>(
     }
 }
 
-open class DatasAdapterX<HOLDER : IViewHolderDatas<DATA>, DATA>(
+class DatasAdapterX<HOLDER : IViewHolderDatas<DATA>, DATA>(
     context: Context,
     holder: KClass<HOLDER>,
     list: List<DATA>? = null,
     vararg args: Any?
-) : RecyclerView.Adapter<HOLDER>(),
-    IAdapterHelper<DATA, HOLDER> by DatasAdapterHelper(context, holder, list, *args) {
+) : RecyclerView.Adapter<HOLDER>(), IAdapterX<DATA, HOLDER> {
+    override var datas: MutableList<DATA> = list as? MutableList ?: (list?.toMutableList() ?: mutableListOf())
+    private val helper = DatasAdapterHelper(this, context, holder, *args)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HOLDER {
-        return onCreateHolder(parent, viewType)
+        return helper.onCreateViewHolder(parent, viewType)
     }
 
     override fun onBindViewHolder(holder: HOLDER, position: Int) {
-        onBindHolder(holder, position)
+        helper.onBindViewHolder(holder, position)
+    }
+
+    override fun setOnItemClickListener(onItemClickListener: ((ClickedItem<DATA>) -> Unit)?) {
+        helper.setOnItemClickListener(onItemClickListener)
     }
 
     override fun getItemData(position: Int): DATA {
