@@ -1,9 +1,7 @@
 package com.dhy.adapterx
 
 import android.content.Context
-import android.support.annotation.LayoutRes
-import android.support.v7.widget.RecyclerView
-import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import kotlin.reflect.KClass
 
 open class AdapterX<HOLDER : IViewHolder<DATA>, DATA>(
@@ -11,9 +9,35 @@ open class AdapterX<HOLDER : IViewHolder<DATA>, DATA>(
     holder: KClass<HOLDER>,
     list: List<DATA>? = null,
     vararg args: Any?
-) : IAdapter<HOLDER, DATA>(context, list, getAdapterParams(context, holder, *args)) {
+) : RecyclerView.Adapter<HOLDER>(),
+    IAdapterX<DATA, HOLDER> by AdapterXHelper(context, holder, list, *args) {
+
     override fun onBindViewHolder(holder: HOLDER, position: Int) {
-        super.onBindViewHolder(holder, position)
-        holder.update(getItem(position), position)
+        val data = datas[position]
+        onBindItemClickListener(holder, data, position)
+        holder.update(data, position)
+    }
+
+    override fun getItemCount(): Int {
+        return datas.size
+    }
+}
+
+open class DatasAdapterX<HOLDER : IDatasViewHolder<DATA>, DATA>(
+    context: Context,
+    holder: KClass<HOLDER>,
+    list: List<DATA>? = null,
+    vararg args: Any?
+) : RecyclerView.Adapter<HOLDER>(),
+    IAdapterX<DATA, HOLDER> by AdapterXHelper(context, holder, list, *args) {
+
+    override fun onBindViewHolder(holder: HOLDER, position: Int) {
+        val data = datas[position]
+        onBindItemClickListener(holder, data, position)
+        holder.update(data, position, datas)
+    }
+
+    override fun getItemCount(): Int {
+        return datas.size
     }
 }

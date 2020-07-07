@@ -1,10 +1,8 @@
 package com.dhy.adapterx
 
 import android.content.Context
-import android.support.annotation.LayoutRes
-import android.support.v7.widget.RecyclerView
 import android.view.View
-import java.lang.Exception
+import androidx.recyclerview.widget.RecyclerView
 import kotlin.reflect.KClass
 
 val RecyclerView.ViewHolder.context: Context get() = itemView.context
@@ -42,12 +40,47 @@ fun <HOLDER : RecyclerView.ViewHolder> getAdapterParams(context: Context?, holde
             cls.isAnnotationPresent(LayoutId::class.java) -> {
                 cls.getAnnotation(LayoutId::class.java)!!.value
             }
-            cls.isAnnotationPresent(LayoutName::class.java) -> {
-                val name = cls.getAnnotation(LayoutName::class.java)!!.value
-                context!!.resources.getIdentifier(name, "layout", context.packageName)
-            }
             else -> throw IllegalArgumentException("getLayoutId failed for holder: ${cls.name}")
         }
     }
     return AdapterParams(creator, layoutId)
+}
+
+inline fun <reified T> View.getTagX(): T {
+    val datas = findRecyclerViewHolderTag()!!
+    return datas[T::class.java.name] as T
+}
+
+inline fun <reified T> View.getTagxOrNull(): T? {
+    val datas = findRecyclerViewHolderTag()
+    return datas?.get(T::class.java.name) as T?
+}
+
+fun View.setTagX(value: Any) {
+    val datas = findRecyclerViewHolderTag()
+    if (datas != null) datas[value.javaClass.name] = value
+}
+
+fun View.findRecyclerViewHolderTag(): MutableMap<String, Any>? {
+    val item = findRvItemView()
+    return if (item == null) null
+    else {
+        val stored = item.getTag(R.id.RECYCLER_VIEW_HOLDER_TAGX)
+        if (stored == null) {
+            val d = mutableMapOf<String, Any>()
+            item.setTag(R.id.RECYCLER_VIEW_HOLDER_TAGX, d)
+            d
+        } else {
+            @Suppress("UNCHECKED_CAST")
+            stored as MutableMap<String, Any>
+        }
+    }
+}
+
+private fun View.findRvItemView(): View? {
+    return if (layoutParams is RecyclerView.LayoutParams) this
+    else {
+        val p = parent as? View
+        p?.findRvItemView()
+    }
 }

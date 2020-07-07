@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AdapterX</string>
+    <string name="type_anno">通过【注解】LayoutId 指定layout，方便查看。\n【不支持】Lib 项目。\n@LayoutId(R.layout.item)\nprivate class Holder(v: View) : IViewHolder&#060;Int&#062;(v)</string>
+    <string name="type_params">通过【参数】指定layout，方便查看。\n【支持】Lib 项目，推荐使用。\nclass Holder(v: View) : IViewHolder&#060;Int&#062;(v, R.layout.item)</string>
 </resources>
