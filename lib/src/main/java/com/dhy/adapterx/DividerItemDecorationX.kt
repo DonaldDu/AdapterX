@@ -4,11 +4,10 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.ItemDecoration
 import android.util.Log
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -19,7 +18,7 @@ import kotlin.math.roundToInt
  * 3. 支持设置是否显示底部的分隔线(showLastDivider default is false)
  * 4. Divider.intrinsicHeight.atLeast(1px)
  */
-class DividerItemDecorationX(context: Context, verticalList: Boolean = true, dividerDrawable: Drawable? = null) : ItemDecoration() {
+class DividerItemDecorationX(context: Context, verticalList: Boolean = true, dividerDrawable: Drawable? = null) : RecyclerView.ItemDecoration() {
     private lateinit var mDivider: Drawable
     private var mWidth = 0
     private var mHeight = 0

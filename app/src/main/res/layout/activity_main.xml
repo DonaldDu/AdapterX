@@ -12,34 +12,23 @@
         android:layout_height="wrap_content"
         android:background="#2196F3"
         android:padding="5dp"
-        android:text="通过【注解】LayoutId 指定layout，方便查看。 \n【不支持】Lib 项目。" />
+        android:text="@string/type_params" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#2196F3"
-        android:padding="5dp"
-        android:text="通过【参数】指定layout，方便查看。\n【支持】Lib 项目。" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#2196F3"
         android:padding="5dp"
-        android:text="通过【注解】LayoutName 指定 layout，不方便查看。\n不推荐使用，仅为兼容旧代码，可以替换成 IViewHolder2" />
+        android:text="@string/type_anno" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView3"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewAnno"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
