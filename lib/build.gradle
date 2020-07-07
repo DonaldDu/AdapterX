@@ -8,29 +8,24 @@ android {
         minSdkVersion 14
         targetSdkVersion 28
         versionCode 1
-        versionName "1.2.3"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        versionName "0.1.9x"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        packagingOptions {
+//            exclude 'META-INF/**.kotlin_module'//排除后无法找到全局扩展方法，需要在app中排除
+        }
     }
-    compileOptions {
-        def PUBLISH_GROUP_ID = 'com.github.DonaldDu'
-        def PUBLISH_ARTIFACT_ID = rootProject.name
-        kotlinOptions.freeCompilerArgs += ['-module-name', "${PUBLISH_GROUP_ID}_${PUBLISH_ARTIFACT_ID}"]
-    }
+
     buildTypes {
         release {
             minifyEnabled false
-            consumerProguardFiles 'proguard-rules.pro'
-        }
-        debug {
-            consumerProguardFiles 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }
 publish {
     userOrg = 'user'
-    groupId = 'com.github.DonaldDu'
+    groupId = 'com.gitee.DonaldDu'
     artifactId = 'AdapterX'
-    //noinspection GroovyAccessibility
     publishVersion = android.defaultConfig.versionName
     desc = 'desc'
     website = 'website'
@@ -38,17 +33,11 @@ publish {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compileOnly 'com.android.support:appcompat-v7:28.0.0'
-    compileOnly 'com.android.support:recyclerview-v7:28.0.0'
+    compileOnly 'androidx.appcompat:appcompat:1.0.2'
+    compileOnly 'androidx.recyclerview:recyclerview:1.0.0'
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-}
-configurations.all {
-    resolutionStrategy.eachDependency {
-        def requested = it.requested
-        if (requested.group == 'org.jetbrains.kotlin') it.useVersion kotlin_version
-    }
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
