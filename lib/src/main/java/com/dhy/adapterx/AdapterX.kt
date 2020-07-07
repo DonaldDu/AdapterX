@@ -23,7 +23,7 @@ open class AdapterX<HOLDER : IViewHolder<DATA>, DATA>(
     }
 }
 
-open class DatasAdapterX<HOLDER : IViewHolderDatas<DATA>, DATA>(
+open class DatasAdapterX<HOLDER : IDatasViewHolder<DATA>, DATA>(
     context: Context,
     holder: KClass<HOLDER>,
     list: List<DATA>? = null,

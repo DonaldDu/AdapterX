@@ -15,6 +15,6 @@ abstract class IViewHolder<DATA>(itemView: View, @LayoutRes layoutId: Int = -1) 
     abstract fun update(data: DATA, position: Int)
 }
 
-abstract class IViewHolderDatas<DATA>(itemView: View, @LayoutRes layoutId: Int = -1) : IHolder<DATA>(itemView, layoutId) {
+abstract class IDatasViewHolder<DATA>(itemView: View, @LayoutRes layoutId: Int = -1) : IHolder<DATA>(itemView, layoutId) {
     abstract fun update(data: DATA, position: Int, datas: List<DATA>)
 }
