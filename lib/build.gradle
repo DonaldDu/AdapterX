@@ -29,7 +29,7 @@ android {
 publish {
     userOrg = 'user'
     groupId = 'com.github.DonaldDu'
-    artifactId = 'AdapterX'
+    artifactId = rootProject.name
     //noinspection GroovyAccessibility
     publishVersion = android.defaultConfig.versionName
     desc = 'desc'
