@@ -65,10 +65,10 @@ fun View.findRecyclerViewHolderTag(): MutableMap<String, Any>? {
     val item = findRvItemView()
     return if (item == null) null
     else {
-        val stored = item.getTag(R.id.RECYCLER_VIEW_VIEW_HOLDER_TAGX)
+        val stored = item.getTag(R.id.RECYCLER_VIEW_HOLDER_TAGX)
         if (stored == null) {
             val d = mutableMapOf<String, Any>()
-            item.setTag(R.id.RECYCLER_VIEW_VIEW_HOLDER_TAGX, d)
+            item.setTag(R.id.RECYCLER_VIEW_HOLDER_TAGX, d)
             d
         } else {
             @Suppress("UNCHECKED_CAST")

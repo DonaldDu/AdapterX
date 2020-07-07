@@ -1,7 +1,6 @@
 package com.dhy.adapterx
 
 import android.content.Context
-import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import kotlin.reflect.KClass
@@ -10,23 +9,20 @@ class PagedAdapterX<DATA : IDiff<DATA>, HOLDER : IViewHolder<DATA>>(
     context: Context,
     holder: KClass<HOLDER>,
     vararg args: Any?
-) : PagedListAdapter<DATA, HOLDER>(DiffCallback()), IAdapterX<DATA, HOLDER> {
-    override var datas: MutableList<DATA> = mutableListOf()
-    private val helper = AdapterHelper(this, context, holder, *args)
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HOLDER {
-        return helper.onCreateViewHolder(parent, viewType)
-    }
+) : PagedListAdapter<DATA, HOLDER>(DiffCallback()),
+    IAdapterX<DATA, HOLDER> by AdapterXHelper(context, holder, null, *args) {
+    override var datas: MutableList<DATA>
+        get() {
+            return currentList?.toMutableList() ?: mutableListOf()
+        }
+        set(value) {
+            throw IllegalStateException("not supported for PagedListAdapter")
+        }
 
     override fun onBindViewHolder(holder: HOLDER, position: Int) {
-        helper.onBindViewHolder(holder, position)
-    }
-
-    override fun setOnItemClickListener(onItemClickListener: ((ClickedItem<DATA>) -> Unit)?) {
-        helper.setOnItemClickListener(onItemClickListener)
-    }
-
-    override fun getItemData(position: Int): DATA {
-        return getItem(position)!!
+        val data = getItem(position)!!
+        onBindItemClickListener(holder, data, position)
+        holder.update(data, position)
     }
 }
 
