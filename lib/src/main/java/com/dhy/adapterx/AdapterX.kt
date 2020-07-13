@@ -13,9 +13,13 @@ open class AdapterX<HOLDER : IViewHolder<DATA>, DATA>(
     IAdapterX<DATA, HOLDER> by AdapterXHelper(context, holder, list, *args) {
 
     override fun onBindViewHolder(holder: HOLDER, position: Int) {
-        val data = datas[position]
+        val data = getItem(position)
         onBindItemClickListener(holder, data, position)
         holder.update(data, position)
+    }
+
+    open fun getItem(position: Int): DATA {
+        return datas[position]
     }
 
     override fun getItemCount(): Int {
@@ -32,9 +36,13 @@ open class DatasAdapterX<HOLDER : IDatasViewHolder<DATA>, DATA>(
     IAdapterX<DATA, HOLDER> by AdapterXHelper(context, holder, list, *args) {
 
     override fun onBindViewHolder(holder: HOLDER, position: Int) {
-        val data = datas[position]
+        val data = getItem(position)
         onBindItemClickListener(holder, data, position)
         holder.update(data, position, datas)
+    }
+
+    open fun getItem(position: Int): DATA {
+        return datas[position]
     }
 
     override fun getItemCount(): Int {
