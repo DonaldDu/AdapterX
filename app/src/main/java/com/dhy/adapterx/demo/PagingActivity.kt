@@ -3,8 +3,6 @@ package com.dhy.adapterx.demo
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +13,7 @@ import kotlinx.android.synthetic.main.item.*
 
 
 class PagingActivity : AppCompatActivity() {
-    private lateinit var adapter: PagedAdapterX<Page, Holder>
+    private lateinit var adapter: PagedAdapterX<Holder, Page>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_paging)
@@ -32,8 +30,8 @@ class PagingActivity : AppCompatActivity() {
             .setInitialLoadSizeHint(10)
             .setPrefetchDistance(5)
             .build()
-        val liveData: LiveData<PagedList<Page>> = LivePagedListBuilder(DbDataSourceFactory(), config).build()
-        liveData.observe(this, Observer<PagedList<Page>> { datas ->
+        val liveData = LivePagedListBuilder(DbDataSourceFactory(), config).build()
+        liveData.observe(this, { datas ->
             adapter.submitList(datas)
         })
     }

@@ -5,12 +5,12 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import kotlin.reflect.KClass
 
-class PagedAdapterX<DATA : IDiff<DATA>, HOLDER : IViewHolder<DATA>>(
+class PagedAdapterX<HOLDER : IViewHolder<DATA>, DATA : IDiff<DATA>>(
     context: Context,
     holder: KClass<HOLDER>,
     vararg args: Any?
 ) : PagedListAdapter<DATA, HOLDER>(DiffCallback()),
-    IAdapterX<DATA, HOLDER> by AdapterXHelper(context, holder, null, *args) {
+    IAdapterX<HOLDER, DATA> by AdapterXHelper(context, holder, null, *args) {
     override var datas: MutableList<DATA>
         get() {
             return currentList?.toMutableList() ?: mutableListOf()

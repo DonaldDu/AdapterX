@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import kotlin.reflect.KClass
 
-interface IAdapterX<DATA, HOLDER : IHolder<DATA>> {
+interface IAdapterX<HOLDER : IHolder<DATA>, DATA> {
     var datas: MutableList<DATA>
     fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HOLDER
     fun onBindItemClickListener(holder: HOLDER, data: DATA, position: Int)
@@ -19,7 +19,7 @@ open class AdapterXHelper<DATA, HOLDER : IHolder<DATA>>(
     holder: KClass<HOLDER>,
     list: List<DATA>? = null,
     vararg args: Any?
-) : IAdapterX<DATA, HOLDER> {
+) : IAdapterX<HOLDER, DATA> {
     private val params = getAdapterParams(context, holder, *args)
     override var datas: MutableList<DATA> = list as? MutableList ?: (list?.toMutableList() ?: mutableListOf())
 

@@ -10,7 +10,7 @@ open class AdapterX<HOLDER : IViewHolder<DATA>, DATA>(
     list: List<DATA>? = null,
     vararg args: Any?
 ) : RecyclerView.Adapter<HOLDER>(),
-    IAdapterX<DATA, HOLDER> by AdapterXHelper(context, holder, list, *args) {
+    IAdapterX<HOLDER, DATA> by AdapterXHelper(context, holder, list, *args) {
 
     override fun onBindViewHolder(holder: HOLDER, position: Int) {
         val data = getItem(position)
@@ -33,7 +33,7 @@ open class DatasAdapterX<HOLDER : IDatasViewHolder<DATA>, DATA>(
     list: List<DATA>? = null,
     vararg args: Any?
 ) : RecyclerView.Adapter<HOLDER>(),
-    IAdapterX<DATA, HOLDER> by AdapterXHelper(context, holder, list, *args) {
+    IAdapterX<HOLDER, DATA> by AdapterXHelper(context, holder, list, *args) {
 
     override fun onBindViewHolder(holder: HOLDER, position: Int) {
         val data = getItem(position)
