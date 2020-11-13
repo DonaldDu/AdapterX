@@ -13,19 +13,18 @@
         val adapter = AdapterX(this, Holder::class, datas)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
-        adapter.setOnItemClickListener { }
+        adapter.setOnItemClickListener {
+            Toast.makeText(this, "position ${it.postion}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     /**
-     *通过注解的方式指定ViewHolder的layout，方便查看。
+     *  通过【参数】指定layout，方便查看。【支持】Lib 项目。推荐使用，App和库项目都支持。
      * */
-    @LayoutId(R.layout.item)
-    private class Holder(v: View) : IViewHolder<Int>(v) {
+    private class Holder(v: View) : IViewHolder<Int>(v, R.layout.item) {
         override fun update(data: Int, position: Int) {
-            itemView.run {
-                tvName.text = "data: $data"
-                tvCode.text = "position $position"
-            }
+            tvName.text = "data: $data"
+            tvCode.text = "position $position"
         }
     }
 ```

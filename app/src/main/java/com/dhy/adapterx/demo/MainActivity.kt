@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
      *  通过【注解】指定layout，方便查看。 【不支持】Lib 项目。
      * */
     @LayoutId(R.layout.item)
+    @Deprecated("use param style plz")
     private class HolderAnno(v: View) : IViewHolder<Int>(v) {
         override fun update(data: Int, position: Int) {
             tvName.text = "data: $data"
