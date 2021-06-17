@@ -1,5 +1,6 @@
 package com.dhy.adapterx.demo
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         init(recyclerView, Holder::class)
+        @Suppress("DEPRECATION")
         init(recyclerViewAnno, HolderAnno::class)
         btPaging.setOnClickListener {
             startActivity(Intent(this, PagingActivity::class.java))
@@ -52,6 +54,7 @@ class MainActivity : AppCompatActivity() {
     /**
      *  通过【注解】指定layout，方便查看。 【不支持】Lib 项目。
      * */
+    @SuppressLint("NonConstantResourceId")
     @LayoutId(R.layout.item)
     @Deprecated("use param style plz")
     private class HolderAnno(v: View) : IViewHolder<Int>(v) {

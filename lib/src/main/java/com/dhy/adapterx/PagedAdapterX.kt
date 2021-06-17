@@ -5,6 +5,7 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import kotlin.reflect.KClass
 
+@Deprecated("use PagingDataAdapterX", replaceWith = ReplaceWith("PagingDataAdapterX"))
 class PagedAdapterX<HOLDER : IViewHolder<DATA>, DATA : IDiff<DATA>>(
     context: Context,
     holder: KClass<HOLDER>,
