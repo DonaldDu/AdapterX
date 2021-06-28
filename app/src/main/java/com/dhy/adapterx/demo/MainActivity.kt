@@ -17,11 +17,12 @@ import kotlinx.android.synthetic.main.item.*
 import kotlin.reflect.KClass
 
 class MainActivity : AppCompatActivity() {
+    private var innerValue = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        init(recyclerView, Holder::class)
+        init(recyclerView, Holder::class, this)
         @Suppress("DEPRECATION")
         init(recyclerViewAnno, HolderAnno::class)
         btPaging.setOnClickListener {
@@ -29,12 +30,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun init(rv: RecyclerView, holder: KClass<out IViewHolder<Int>>) {
+    private fun init(rv: RecyclerView, holder: KClass<out IViewHolder<Int>>, vararg any: Any?) {
         rv.layoutManager = LinearLayoutManager(this)
         rv.addItemDecoration(DividerItemDecorationX(this))
 
         val datas = (1..2).toList()
-        val adapter: AdapterX<out IViewHolder<Int>, Int> = AdapterX(this, holder, datas)
+        val adapter: AdapterX<out IViewHolder<Int>, Int> = AdapterX(this, holder, datas, *any)
         rv.adapter = adapter
         adapter.setOnItemClickListener {
             Toast.makeText(this, "position ${it.postion}", Toast.LENGTH_SHORT).show()
@@ -42,12 +43,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     *  通过【参数】指定layout，方便查看。【支持】Lib 项目。推荐使用，App和库项目都支持。
+     *
+     *  通过【参数】指定layout，方便查看。
+     * 【支持】Lib 项目。推荐使用，App和库项目都支持。
+     * 【支持】inner 内部类
      * */
-    private class Holder(v: View) : IViewHolder<Int>(v, R.layout.item) {
+    private inner class Holder(v: View) : IViewHolder<Int>(v, R.layout.item) {
         override fun update(data: Int, position: Int) {
+            tvCode.text = "position $position, innerValue: $innerValue"
             tvName.text = "data: $data"
-            tvCode.text = "position $position"
         }
     }
 

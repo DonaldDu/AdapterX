@@ -25,9 +25,7 @@ class PagingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_paging)
-        val loadAdapter = LoadStateAdapterX(this, LoadStateViewHolder::class, View.OnClickListener {
-            adapter.retry()
-        })
+        val loadAdapter = LoadStateAdapterX(this, LoadStateViewHolder::class, this)
         adapter = PagingDataAdapterX(this, Holder::class)
         recyclerView.adapter = adapter.withLoadStateFooter(loadAdapter)
         initPaging()
@@ -70,9 +68,11 @@ class PagingActivity : AppCompatActivity() {
         }
     }
 
-    private class LoadStateViewHolder(v: View, retry: View.OnClickListener) : IViewHolder<LoadState>(v, R.layout.item_loadstate) {
+    private inner class LoadStateViewHolder(v: View) : IViewHolder<LoadState>(v, R.layout.item_loadstate) {
         init {
-            btn_retry.setOnClickListener(retry)
+            btn_retry.setOnClickListener {
+                adapter.retry()
+            }
         }
 
         override fun update(data: LoadState, position: Int) {

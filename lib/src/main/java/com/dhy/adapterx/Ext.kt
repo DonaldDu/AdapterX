@@ -13,9 +13,10 @@ fun <HOLDER : RecyclerView.ViewHolder> getHolderCreator(holder: KClass<HOLDER>, 
     if (!constructor.isAccessible) constructor.isAccessible = true
     if (args.isEmpty()) return { constructor.newInstance(it) as HOLDER }
     else {
-        val params = args.toMutableList().apply { add(0, null) }.toTypedArray()
+        val itemViewIndex = if (holder.isInner) 1 else 0
+        val params = args.toMutableList().apply { add(itemViewIndex, null) }.toTypedArray()
         return {
-            params[0] = it
+            params[itemViewIndex] = it
             constructor.newInstance(*params) as HOLDER
         }
     }
