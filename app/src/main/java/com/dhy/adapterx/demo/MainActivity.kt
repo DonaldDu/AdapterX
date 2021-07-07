@@ -28,6 +28,9 @@ class MainActivity : AppCompatActivity() {
         btPaging.setOnClickListener {
             startActivity(Intent(this, PagingActivity::class.java))
         }
+        btGrid.setOnClickListener {
+            startActivity(Intent(this, GridActivity::class.java))
+        }
     }
 
     private fun init(rv: RecyclerView, holder: KClass<out IViewHolder<Int>>, vararg any: Any?) {

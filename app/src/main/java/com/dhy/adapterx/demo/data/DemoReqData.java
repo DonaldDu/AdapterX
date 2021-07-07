@@ -118,9 +118,15 @@ public class DemoReqData implements Serializable {
         public int zan;
         public List<TagsBean> tags;
 
+
         @Override
-        public boolean isSame(@NotNull DatasBean other) {
-            return id == other.id;
+        public boolean areItemsTheSame(@NotNull DatasBean other) {
+            return other.id == id;
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NotNull DatasBean other) {
+            return other.id == id;
         }
     }
 

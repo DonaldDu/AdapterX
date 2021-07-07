@@ -28,15 +28,16 @@ class PagedAdapterX<DATA : IDiff<DATA>, HOLDER : IViewHolder<DATA>>(
 }
 
 interface IDiff<T : IDiff<T>> {
-    fun isSame(other: T): Boolean
+    fun areItemsTheSame(other: T): Boolean
+    fun areContentsTheSame(other: T): Boolean
 }
 
 class DiffCallback<T : IDiff<T>> : DiffUtil.ItemCallback<T>() {
     override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
-        return oldItem.isSame(newItem)
+        return oldItem.areItemsTheSame(newItem)
     }
 
     override fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
-        return oldItem.isSame(newItem)
+        return oldItem.areContentsTheSame(newItem)
     }
 }

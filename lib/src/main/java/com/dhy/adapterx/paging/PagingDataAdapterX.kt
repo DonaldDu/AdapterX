@@ -3,10 +3,7 @@ package com.dhy.adapterx.paging
 import android.content.Context
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import com.dhy.adapterx.AdapterXHelper
-import com.dhy.adapterx.DiffCallback
-import com.dhy.adapterx.IDiff
-import com.dhy.adapterx.IViewHolder
+import com.dhy.adapterx.*
 import kotlin.reflect.KClass
 
 class PagingDataAdapterX<HOLDER : IViewHolder<DATA>, DATA : IDiff<DATA>>(
@@ -23,5 +20,9 @@ class PagingDataAdapterX<HOLDER : IViewHolder<DATA>, DATA : IDiff<DATA>>(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HOLDER {
         return helper.onCreateViewHolder(parent, viewType)
+    }
+
+    fun setOnItemClickListener(onItemClickListener: ((ClickedItem<DATA>) -> Unit)?) {
+        helper.setOnItemClickListener(onItemClickListener)
     }
 }

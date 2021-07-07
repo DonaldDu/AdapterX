@@ -12,6 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="paging" />
+    <Button
+        android:id="@+id/btGrid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Grid" />
 
     <TextView
         android:layout_width="match_parent"
