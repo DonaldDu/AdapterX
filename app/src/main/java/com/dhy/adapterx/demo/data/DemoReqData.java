@@ -2,6 +2,7 @@ package com.dhy.adapterx.demo.data;
 
 
 import com.dhy.adapterx.IDiff;
+import com.dhy.adapterx.paging.IDiff2;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -42,7 +43,7 @@ public class DemoReqData implements Serializable {
         public List<DatasBean> datas;
     }
 
-    public static class DatasBean implements Serializable, IDiff<DatasBean> {
+    public static class DatasBean implements Serializable, IDiff2<DatasBean> {
         /**
          * apkLink :
          * audit : 1

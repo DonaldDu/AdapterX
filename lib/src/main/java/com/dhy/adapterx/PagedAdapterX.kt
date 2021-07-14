@@ -27,17 +27,19 @@ class PagedAdapterX<DATA : IDiff<DATA>, HOLDER : IViewHolder<DATA>>(
     }
 }
 
+@Deprecated(message = "use IDiff2", replaceWith = ReplaceWith("IDiff2"))
 interface IDiff<T : IDiff<T>> {
-    fun areItemsTheSame(other: T): Boolean
-    fun areContentsTheSame(other: T): Boolean
+    @Deprecated("may be error when update item status")
+    fun isSame(other: T): Boolean
 }
 
+@Deprecated(message = "use DiffCallback2", replaceWith = ReplaceWith("DiffCallback2"))
 class DiffCallback<T : IDiff<T>> : DiffUtil.ItemCallback<T>() {
     override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
-        return oldItem.areItemsTheSame(newItem)
+        return oldItem.isSame(newItem)
     }
 
     override fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
-        return oldItem.areContentsTheSame(newItem)
+        return oldItem.isSame(newItem)
     }
 }
