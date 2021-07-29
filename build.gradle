@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlin_version = '1.5.20'
+        kotlin_version = '1.5.21'
         paging_version = "3.0.0-alpha07"
 //        paging_version = "3.1.0-alpha01"
     }

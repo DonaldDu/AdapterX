@@ -22,3 +22,4 @@
 -keepclassmembers class * extends com.dhy.adapterx.IHolder{
     <init>(...);
 }
+-keep,allowobfuscation class * extends com.dhy.adapterx.IHolder
